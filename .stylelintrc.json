@@ -1,0 +1,44 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "unit-allowed-list": [
+      ["px", "%", "fr", "vh", "vw"],
+      {
+        "ignoreProperties": {
+          "/^animation/": ["s", "ms"],
+          "/^transition/": ["s", "ms"]
+        }
+      }
+    ],
+    "declaration-property-value-allowed-list": {
+      "display": ["block", "inline", "flex", "grid", "none"],
+      "position": ["relative", "absolute", "sticky"],
+      "justify-content": ["start", "center", "end", "space-between", "space-around"],
+      "align-items": ["start", "center", "end", "stretch", "baseline"],
+      "place-items": ["start", "center", "end", "stretch"],
+      "place-content": ["start", "center", "end", "space-between", "space-around"],
+      "overflow": ["visible", "hidden", "auto", "scroll"]
+    },
+    "property-allowed-list": [
+      "display", "position", "top", "right", "bottom", "left", "z-index",
+      "width", "height", "min-width", "max-width", "min-height", "max-height", "aspect-ratio",
+      "flex-grow", "flex-shrink", "flex-basis",
+      "justify-content", "align-items", "gap",
+      "grid-template-columns", "grid-template-rows", "grid-column", "grid-row", "grid-area",
+      "place-items", "place-content", "place-self",
+      "padding-inline", "padding-block", "margin-inline", "margin-block",
+      "color", "background", "border", "border-radius", "box-shadow", "opacity",
+      "font-size", "font-weight", "font-family", "line-height", "letter-spacing",
+      "text-align", "white-space", "overflow-wrap",
+      "cursor", "transition", "transform"
+    ],
+    "property-disallowed-list": [
+      "float", "clear",
+      "columns", "column-count", "column-gap", "column-rule", "column-span", "column-width",
+      "margin-left", "margin-right", "padding-left", "padding-right"
+    ],
+    "property-no-vendor-prefix": true,
+    "value-no-vendor-prefix": true,
+    "selector-type-no-unknown": true
+  }
+}
