@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cruftless CSS Demo</title>
+    <link rel="stylesheet" href="../reset.css">
+    <style>
+        /* Demo styles using only Cruftless CSS subset */
+        
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: var(--z-overlay);
+            background: var(--color-primary);
+            color: white;
+            padding-inline: var(--space-4);
+            padding-block: var(--space-3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-container {
+            display: flex;
+            gap: var(--space-4);
+            padding-inline: var(--space-4);
+            padding-block: var(--space-5);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            min-width: 200px;
+            background: var(--color-bg);
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding-inline: var(--space-4);
+            padding-block: var(--space-4);
+        }
+
+        /* Container query - sidebar adapts when space is tight */
+        @container (max-width: 600px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                min-width: auto;
+            }
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-4);
+            margin-block: var(--space-5);
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding-inline: var(--space-4);
+            padding-block: var(--space-4);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow var(--duration-fast) var(--easing-standard);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Container query - cards stack at smaller sizes */
+        @container (max-width: 400px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: var(--z-modal);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity var(--duration-base) var(--easing-standard);
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 8px;
+            padding-inline: var(--space-6);
+            padding-block: var(--space-6);
+            box-shadow: var(--shadow-lg);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .btn {
+            background: var(--color-primary);
+            color: white;
+            padding-inline: var(--space-4);
+            padding-block: var(--space-2);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity var(--duration-fast) var(--easing-standard);
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .nav-item {
+            padding-block: var(--space-2);
+            border-bottom: 1px solid #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Cruftless CSS Demo</h1>
+        <button class="btn" onclick="openModal()">Open Modal</button>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <h3>Navigation</h3>
+            <nav class="nav-list" role="list">
+                <div class="nav-item">Dashboard</div>
+                <div class="nav-item">Projects</div>
+                <div class="nav-item">Settings</div>
+                <div class="nav-item">Help</div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h2>Modern CSS Layout Demo</h2>
+            <p>This page demonstrates modern CSS features using only the Cruftless CSS subset:</p>
+
+            <ul>
+                <li><strong>Flexbox & Grid</strong> - for predictable layouts</li>
+                <li><strong>Container Queries</strong> - components adapt to their container</li>
+                <li><strong>Logical Properties</strong> - margin-inline, padding-block</li>
+                <li><strong>Semantic Z-index</strong> - layered with design tokens</li>
+                <li><strong>Design Tokens</strong> - consistent spacing, colors, shadows</li>
+            </ul>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Flexbox Layout</h3>
+                    <p>The header uses flexbox for alignment. The main container uses flexbox with gap for spacing.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>CSS Grid</h3>
+                    <p>This card grid uses CSS Grid with auto-fit and minmax for responsive behavior without media queries.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>Container Queries</h3>
+                    <p>Resize the browser to see how the sidebar and cards adapt based on their container size, not viewport.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>Design Tokens</h3>
+                    <p>All spacing uses semantic tokens (--space-4), z-index uses layers (--z-overlay), colors use variables.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <h3>Modal Example</h3>
+            <p>This modal is layered using semantic z-index tokens (--z-modal) for predictable layering.</p>
+            <button class="btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('modal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('show');
+        }
+
+        // Close on overlay click
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
