@@ -88,7 +88,7 @@
             height: 100vh;
             background: rgba(0, 0, 0, 0.5);
             z-index: var(--z-modal);
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
             opacity: 0;
@@ -96,6 +96,7 @@
         }
 
         .modal-overlay.show {
+            display: flex;
             opacity: 1;
         }
 
@@ -133,12 +134,148 @@
             padding-block: var(--space-2);
             border-bottom: 1px solid #f0f0f0;
         }
+
+        /* Theme switcher */
+        .theme-switcher {
+            display: flex;
+            gap: var(--space-2);
+            align-items: center;
+            margin-block: var(--space-4);
+        }
+
+        .theme-btn {
+            padding-inline: var(--space-3);
+            padding-block: var(--space-2);
+            border: 1px solid var(--color-primary);
+            border-radius: 4px;
+            background: transparent;
+            color: var(--color-primary);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--easing-standard);
+        }
+
+        .theme-btn.active {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Dark theme */
+        [data-theme="dark"] {
+            --color-bg: #1a1a1a;
+            --color-fg: #ffffff;
+            --color-primary: #60a5fa;
+        }
+
+        [data-theme="dark"] .card {
+            background: #2d2d2d;
+            border-color: #404040;
+            color: var(--color-fg);
+        }
+
+        [data-theme="dark"] .sidebar {
+            background: #2d2d2d;
+            border-color: #404040;
+        }
+
+        [data-theme="dark"] .form-demo {
+            background: #2d2d2d;
+        }
+
+        [data-theme="dark"] .form-input {
+            background: #3d3d3d;
+            border-color: #505050;
+            color: var(--color-fg);
+        }
+
+        [data-theme="dark"] .theme-btn {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        /* Animated cards */
+        .animated-card {
+            transform: translateY(0);
+            transition: transform var(--duration-base) var(--easing-standard);
+        }
+
+        .animated-card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: var(--space-4);
+            right: var(--space-4);
+            background: var(--color-primary);
+            color: white;
+            padding-inline: var(--space-5);
+            padding-block: var(--space-3);
+            border-radius: 6px;
+            z-index: var(--z-toast);
+            transform: translateX(100%);
+            transition: transform var(--duration-base) var(--easing-standard);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* Interactive form demo */
+        .form-demo {
+            background: #f8f9fa;
+            padding-inline: var(--space-5);
+            padding-block: var(--space-5);
+            border-radius: 8px;
+            margin-block: var(--space-5);
+        }
+
+        .form-group {
+            margin-block: var(--space-3);
+        }
+
+        .form-input {
+            width: 100%;
+            padding-inline: var(--space-3);
+            padding-block: var(--space-2);
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            transition: border-color var(--duration-fast) var(--easing-standard);
+        }
+
+        .form-input:focus {
+            border-color: var(--color-primary);
+        }
+
+        /* Responsive typography demo */
+        .responsive-text {
+            container-type: inline-size;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            padding-inline: var(--space-5);
+            padding-block: var(--space-5);
+            border-radius: 12px;
+            margin-block: var(--space-5);
+        }
+
+        .responsive-text h2 {
+            font-size: var(--font-size-xl);
+        }
+
+        @container (min-width: 400px) {
+            .responsive-text h2 {
+                font-size: 3rem;
+            }
+        }
     </style>
 </head>
 <body>
     <header class="header">
         <h1>Cruftless CSS Demo</h1>
-        <button class="btn" onclick="openModal()">Open Modal</button>
+        <div style="display: flex; gap: var(--space-2); align-items: center;">
+            <button class="btn" onclick="showToast()">Show Toast</button>
+            <button class="btn" onclick="openModal()">Open Modal</button>
+        </div>
     </header>
 
     <div class="main-container">
@@ -156,33 +293,73 @@
             <h2>Modern CSS Layout Demo</h2>
             <p>This page demonstrates modern CSS features using only the Cruftless CSS subset:</p>
 
-            <ul>
+            <ul role="list" style="list-style: disc; margin-inline-start: var(--space-5);">
                 <li><strong>Flexbox & Grid</strong> - for predictable layouts</li>
                 <li><strong>Container Queries</strong> - components adapt to their container</li>
                 <li><strong>Logical Properties</strong> - margin-inline, padding-block</li>
                 <li><strong>Semantic Z-index</strong> - layered with design tokens</li>
                 <li><strong>Design Tokens</strong> - consistent spacing, colors, shadows</li>
+                <li><strong>Theme Switching</strong> - CSS custom properties for theming</li>
             </ul>
 
+            <div class="theme-switcher">
+                <span>Theme:</span>
+                <button class="theme-btn active" onclick="setTheme('light')">Light</button>
+                <button class="theme-btn" onclick="setTheme('dark')">Dark</button>
+            </div>
+
+            <div class="responsive-text">
+                <h2>Container Query Typography</h2>
+                <p>This heading grows larger when its container is wider than 400px. Resize to see the effect!</p>
+            </div>
+
+            <div class="form-demo">
+                <h3>Form Reset Demo</h3>
+                <p>Form elements inherit font and color, with consistent styling:</p>
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Your name" />
+                </div>
+                <div class="form-group">
+                    <select class="form-input">
+                        <option>Choose option</option>
+                        <option>Option 1</option>
+                        <option>Option 2</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-input" placeholder="Your message" rows="3"></textarea>
+                </div>
+            </div>
+
             <div class="card-grid">
-                <div class="card">
+                <div class="card animated-card">
                     <h3>Flexbox Layout</h3>
-                    <p>The header uses flexbox for alignment. The main container uses flexbox with gap for spacing.</p>
+                    <p>The header uses flexbox for alignment. The main container uses flexbox with gap for spacing. Hover for animation!</p>
                 </div>
                 
-                <div class="card">
+                <div class="card animated-card">
                     <h3>CSS Grid</h3>
                     <p>This card grid uses CSS Grid with auto-fit and minmax for responsive behavior without media queries.</p>
                 </div>
                 
-                <div class="card">
+                <div class="card animated-card">
                     <h3>Container Queries</h3>
                     <p>Resize the browser to see how the sidebar and cards adapt based on their container size, not viewport.</p>
                 </div>
                 
-                <div class="card">
+                <div class="card animated-card">
                     <h3>Design Tokens</h3>
                     <p>All spacing uses semantic tokens (--space-4), z-index uses layers (--z-overlay), colors use variables.</p>
+                </div>
+                
+                <div class="card animated-card">
+                    <h3>Smooth Animations</h3>
+                    <p>All transitions use motion design tokens (--duration-base, --easing-standard) for consistent timing.</p>
+                </div>
+                
+                <div class="card animated-card">
+                    <h3>Semantic Z-Index</h3>
+                    <p>Toast notifications use --z-toast (3000), modals use --z-modal (2000), overlays use --z-overlay (1000).</p>
                 </div>
             </div>
         </main>
@@ -192,22 +369,63 @@
         <div class="modal">
             <h3>Modal Example</h3>
             <p>This modal is layered using semantic z-index tokens (--z-modal) for predictable layering.</p>
-            <button class="btn" onclick="closeModal()">Close</button>
+            <p>Notice how it appears above everything else, and you can close it with Escape key or by clicking outside.</p>
+            <div style="display: flex; gap: var(--space-2); margin-block-start: var(--space-4);">
+                <button class="btn" onclick="closeModal()">Close</button>
+                <button class="btn" onclick="showToast(); closeModal();">Close & Toast</button>
+            </div>
         </div>
+    </div>
+
+    <div class="toast" id="toast">
+        Z-index layering works perfectly! 🎉
     </div>
 
     <script>
         function openModal() {
-            document.getElementById('modal').classList.add('show');
+            const modal = document.getElementById('modal');
+            modal.classList.add('show');
+            // Force reflow then animate in
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
         }
 
         function closeModal() {
-            document.getElementById('modal').classList.remove('show');
+            const modal = document.getElementById('modal');
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.classList.remove('show');
+            }, 300); // Match --duration-base
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            // Update active button
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
         }
 
         // Close on overlay click
         document.getElementById('modal').addEventListener('click', function(e) {
             if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('modal').classList.contains('show')) {
                 closeModal();
             }
         });
